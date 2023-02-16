@@ -1,19 +1,33 @@
 from typing import List
 
 import uvicorn as uvicorn
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from starlette.responses import HTMLResponse, RedirectResponse
+from starlette.staticfiles import StaticFiles
+
+from starlette.templating import Jinja2Templates
+
 from employee import Employee
 from service import DBService
 
 app = FastAPI()
 
+templates = Jinja2Templates(directory="static")
 db_service = DBService('employee.db')
-
 
 # @app.get("/")
 # async def root():
 #     return {"message": "Hello World",
 #             "message2": "Hello World"}
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+@app.get("/", response_class=HTMLResponse)
+async def read_root(request: Request):
+    all_employees = db_service.get_all_employees()
+    # return RedirectResponse(url="/static/index.html")
+    return templates.TemplateResponse("index.html", {"request": request, "data": all_employees})
 
 
 @app.get("/employee", summary="Get all employees", description="Get all employees from sqlite database")
@@ -49,7 +63,7 @@ async def create_new_employee(employee : Employee):
 
 @app.put("/employee/{id}", summary="Update values of an employee by his id",
          description="Update values of an employee by his id from sqlite database")
-async def update_one_employee_by_id(id: int, employee : Employee):
+async def update_one_employee_by_id(id: int, employee: Employee):
     if id != employee.id:
         if not employee.id:
             employee.id = id
@@ -59,7 +73,7 @@ async def update_one_employee_by_id(id: int, employee : Employee):
     return update_an_employee
 
 
-uvicorn.run(app)
+uvicorn.run(app, host="0.0.0.0")
 
 # TODO
 # delete_one_employee_by_id (pas très compliqué, pas censé retourner un truc, verbe delete)

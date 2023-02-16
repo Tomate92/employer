@@ -49,7 +49,9 @@ class DBService:
         self.c.execute("INSERT INTO employees VALUES (:id, :first, :last, :pay)",
                        {'id': None, 'first': employee.first, 'last': employee.last, 'pay': employee.pay})
         self.conn.commit()
-        return self.get_one_employee_by_id(employee.id)
+        new_id = self.c.execute("SELECT id FROM employees ORDER BY id DESC LIMIT 1").fetchone()
+        new_employee = self.get_one_employee_by_id(new_id[0])
+        return new_employee
 
     def update_one_employee_by_id(self, employee: Employee) -> Employee:
         self.c.execute("""UPDATE employees SET pay = :pay, first=:first, last=:last

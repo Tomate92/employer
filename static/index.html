@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Employer 2000</title>
+</head>
+<body>
+<h1>Welcome to my page !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</h1>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>FirstName</th>
+        <th>LastName</th>
+        <th>Pay</th>
+    </tr>
+    {% for row in data %}
+    <tr>
+        <td>{{ row.id }}</td>
+        <td>{{ row.first }}</td>
+        <td>{{ row.last }}</td>
+        <td>{{ row.pay }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+
+<h1>Créer un employé</h1>
+<form method="post" action="/employee/">
+    <label for="fname">First name:</label>
+    <input type="text" id="fname" name="fname">
+    <br><br>
+    <label for="lname">Last name:</label>
+    <input type="text" id="lname" name="lname">
+    <br><br>
+    <label for="lname">Pay: </label>
+    <input type="text" id="pay" name="pay">
+    <br><br>
+    <input type="submit" value="Submit">
+</form>
+
+
+</body>
+</html>
