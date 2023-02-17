@@ -59,3 +59,7 @@ class DBService:
                        {'pay': employee.pay, 'id': employee.id, 'first': employee.first, 'last': employee.last})
         self.conn.commit()
         return self.get_one_employee_by_id(employee.id)
+
+    def delete_all_employees(self):
+        self.c.execute("DELETE * from employees")
+        self.conn.commit()

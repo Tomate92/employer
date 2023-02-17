@@ -2,16 +2,60 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Employer 2000</title>
-</head>
-<body>
-<h1>Welcome to my page !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</h1>
+    <title>Employer 2000</title></head>
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        button.delete{
+            background-color: transparent;
+            border-width: 0;
+            cursor: pointer;
+            color: red;
+        }
+        h1, h2{
+            text-decoration: underline lightcoral;
+        }
+        table, td, th{
+            border: black solid 2px;
+            border-collapse: collapse;
+            text-align: center;
+            padding: 10px;
+        }
+
+        tr:nth-child(even) {background: #CCC}
+        tr:nth-child(odd) {background: #FFF}
+
+    </style>
+
+
+<script>
+        function deleteEmployee(employeeId){
+            console.log('delete' + employeeId);
+
+            var myHeaders = new Headers();
+
+            var myInit = { method: 'DELETE',
+               headers: myHeaders,
+               mode: 'cors',
+               cache: 'default' };
+
+            fetch('/employee/'+employeeId, myInit)
+                .then(function(response) {
+                  window.location.reload();
+                })
+        }
+
+
+</script>
+
+<body><h1>Welcome to the employer 2000 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</h1>
 <table>
     <tr>
         <th>ID</th>
         <th>FirstName</th>
         <th>LastName</th>
         <th>Pay</th>
+        <th><i class="fa fa-trash" aria-hidden="true"></i></th>
     </tr>
     {% for row in data %}
     <tr>
@@ -19,26 +63,20 @@
         <td>{{ row.first }}</td>
         <td>{{ row.last }}</td>
         <td>{{ row.pay }}</td>
+        <td>
+            <!--            <span onclick="deleteEmployee({{ row.id }})"><i class="fa fa-car"></i></span>-->
+            <button class="delete" onclick="deleteEmployee({{ row.id }})"><i class="fa fa-times" aria-hidden="true"></i></button>
+        </td>
     </tr>
     {% endfor %}
 </table>
+<h2>Créer un employé depuis des form data</h2>
+<form action="/employee-from-form" method="post">
+    <label for="first">Firstname :</label><input type="text" id="first" name="first" required>
+    <label for="last">Lastname :</label> <input type="text" id="last" name="last" required>
+    <label for="pay">Pay :</label><input id="pay" name="pay" required> </input>
+    <button type="submit" ><i class="fa fa-paper-plane-o" aria-hidden="true"></i> Submit</button>
 
-
-
-<h1>Créer un employé</h1>
-<form method="post" action="/employee/">
-    <label for="fname">First name:</label>
-    <input type="text" id="fname" name="fname">
-    <br><br>
-    <label for="lname">Last name:</label>
-    <input type="text" id="lname" name="lname">
-    <br><br>
-    <label for="lname">Pay: </label>
-    <input type="text" id="pay" name="pay">
-    <br><br>
-    <input type="submit" value="Submit">
 </form>
-
-
 </body>
 </html>
